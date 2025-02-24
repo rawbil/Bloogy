@@ -32,7 +32,7 @@ export default function Login() {
     <OutsideClickHandler onOutsideClick={() => router.back()}>
       <form
         onSubmit={handleSubmit}
-        className="bg-green w-[500px] max-w-[90%]  mt-[20vh] max-800:mt-[25vh] max-500:mt-[20vh] mx-auto  p-2 rounded font-josefin shadow dark:shadow-white shadow-black"
+        className="bg-green w-[500px] max-w-[90%]  mt-[16vh] max-800:mt-[25vh] max-500:mt-[20vh] mx-auto  p-2 rounded font-josefin shadow dark:shadow-white shadow-black"
       >
         <h2 className="mb-5 flex justify-between w-full items-center">
           <span className="font-[500] text-[24px] max-700:text-[20px] max-500:text-base uppercase">Login</span>
