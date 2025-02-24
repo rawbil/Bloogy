@@ -28,13 +28,14 @@ export default function Login() {
   const { values, errors, touched, handleChange, handleSubmit } = formik;
 
   return (
+    <div className="h-screen overflow-y-hidden w-full">
     <OutsideClickHandler onOutsideClick={() => router.back()}>
       <form
         onSubmit={handleSubmit}
-        className="bg-green w-[450px] max-w-full mx-auto p-2 rounded mt-[100px] font-josefin shadow dark:shadow-white shadow-black"
+        className="bg-green w-[500px] max-w-[90%]  mt-[20vh] max-800:mt-[25vh] max-500:mt-[20vh] mx-auto  p-2 rounded font-josefin shadow dark:shadow-white shadow-black"
       >
-        <h2 className="mb-5 flex justify-between w-full items-center ">
-          <span className="font-[500] text-[24px] uppercase">Login</span>
+        <h2 className="mb-5 flex justify-between w-full items-center">
+          <span className="font-[500] text-[24px] max-700:text-[20px] max-500:text-base uppercase">Login</span>
           <span
             className="cursor-pointer hover:text-white/50"
             onClick={() => router.back()}
@@ -104,5 +105,6 @@ export default function Login() {
         </p>
       </form>
     </OutsideClickHandler>
+    </div>
   );
 }
