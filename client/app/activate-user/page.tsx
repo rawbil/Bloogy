@@ -1,4 +1,4 @@
-
+import {} from 'react-otp-input'
 
 export default function ActivateUser() {
     return (
