@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   createContext,
   Dispatch,
@@ -10,10 +11,9 @@ import {
 
 interface IContext {
   url: string;
-  accessToken: string;
-  setAccessToken: Dispatch<SetStateAction<string>>;
-  activationToken: null,
+  activationToken: null;
   setActivationToken: Dispatch<SetStateAction<null>>;
+  redirectToLogin: () => void;
 }
 
 export const AppContext = createContext<IContext | undefined>(undefined);
@@ -23,13 +23,24 @@ export default function ProviderFunction({
 }: {
   children: React.ReactNode;
 }) {
-  const [accessToken, setAccessToken] = useState("");
-  
-  const [activationToken,setActivationToken] = useState(null);
+  const router = useRouter();
+  //const [accessToken, setAccessToken] = useState("");
+
+  const [activationToken, setActivationToken] = useState(null);
   const url = "http://localhost:8000";
 
+  //* redirect user to login page if cookies are not available
+  const redirectToLogin = () => {
+    const loginUrl = window.location.origin + "/user/login";
+    router.push(
+      `${loginUrl}?redirect=${encodeURIComponent(window.location.href)}`
+    );
+  };
+
   return (
-    <AppContext.Provider value={{ url, accessToken, setAccessToken, activationToken, setActivationToken }}>
+    <AppContext.Provider
+      value={{ url, activationToken, setActivationToken, redirectToLogin }}
+    >
       {children}
     </AppContext.Provider>
   );
