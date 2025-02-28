@@ -7,32 +7,57 @@ import Link from "next/link";
 import { useFormik } from "formik";
 import { ValidateLoginSchema } from "@/components/utils/validate";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import {X} from 'lucide-react'
+import { X } from "lucide-react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useRouter } from "next/navigation";
-import axios from 'axios';
+import axios from "axios";
 import { useContextFunc } from "@/components/context/AppContext";
+import { toast } from "react-hot-toast";
 
 interface formData {
   email: string;
   password: string;
 }
 
-
 const Login = () => {
-  const {url} = useContextFunc();
+  const { url } = useContextFunc();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (values: formData) => {
+    setLoading(true);
     const newUrl = url + "/api/user/login";
     try {
-      const response = await axios.post(newUrl, values, {withCredentials: true});
-      
+      const response = await axios.post(newUrl, values, {
+        withCredentials: true,
+      }); //tells axios to include credentials(cookies, authorization headers,etc) in the request
+      if (response.data.success) {
+        toast.success(response.data.message);
+        const redirectUrl =
+          new URLSearchParams(window.location.search).get("redirect") || "/";
+        router.push(redirectUrl);
+        /* 
+        // Example of redirecting to login page with the current URL as a query parameter
+          const redirectToLogin = () => {
+            const loginUrl = window.location.origin + "/user/login";
+            router.push(`${loginUrl}?redirect=${encodeURIComponent(window.location.href)}`);
+          };
+
+          By following these steps, when a user is redirected to the login page, the current URL will be included as a query parameter. After a successful login, the user will be redirected back to the original page they were trying to access.
+         */
+      } else {
+        toast.error("oops... an error occurred!");
+      }
     } catch (error: any) {
-      
+      if (error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("oops... an error occurred!");
+      }
+    } finally {
+      setLoading(false);
     }
-    
   };
 
   const { values, handleChange, handleBlur, handleSubmit, errors, touched } =
@@ -49,7 +74,10 @@ const Login = () => {
           Sign In
         </h2>
 
-        <X className="absolute top-2 right-2 text-gray-900 dark:text-white cursor-pointer" onClick={() => router.back()} />
+        <X
+          className="absolute top-2 right-2 text-gray-900 dark:text-white cursor-pointer"
+          onClick={() => router.back()}
+        />
 
         <form className="w-full space-y-4" onSubmit={handleSubmit}>
           {/*email field */}
@@ -109,9 +137,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-3 max-500:py-2 rounded-md font-semibold hover:bg-purple-700 transition duration-300"
+            className={`w-full bg-purple-600 text-white py-3 max-500:py-2 rounded-md font-semibold hover:bg-purple-700 transition duration-300 ${loading && "bg-purple-700"}`}
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Loggin in..." : "Login"}
           </button>
         </form>
 
