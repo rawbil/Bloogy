@@ -53,7 +53,7 @@ const fetchProtectedData = async () => {
 
 ## Handling login redirect
 
-# Allow user to go back to the page they were before being redirected to login
+### Allow user to go back to the page they were before being redirected to login
 
 - **On Login:**
   ```
