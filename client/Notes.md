@@ -73,5 +73,6 @@ const fetchProtectedData = async () => {
       };
   ```
 ---
-  ### -This should happen if cookies are not present in the response, meaning user is not logged in.
-  ### -By following these steps, when a user is redirected to the login page, the current URL will be included as a query parameter. After a successful login, the user will be redirected back to the original page they were trying to access.
+   -This should happen if cookies are not present in the response, meaning user is not logged in.
+   **.**
+   -By following these steps, when a user is redirected to the login page, the current URL will be included as a query parameter. After a successful login, the user will be redirected back to the original page they were trying to access.
