@@ -1,8 +1,5 @@
 # Handling cookies
 - **Method 1**:
-  import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 
 ```
 const fetchProtectedData = async () => {
