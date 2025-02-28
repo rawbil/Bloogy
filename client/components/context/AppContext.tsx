@@ -1,6 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 import {
   createContext,
   Dispatch,
@@ -14,6 +17,7 @@ interface IContext {
   activationToken: null;
   setActivationToken: Dispatch<SetStateAction<null>>;
   redirectToLogin: () => void;
+  handleLogout: () => Promise<void>;
 }
 
 export const AppContext = createContext<IContext | undefined>(undefined);
@@ -37,9 +41,40 @@ export default function ProviderFunction({
     );
   };
 
+  //get cookie
+  const handleLogout = async () => {
+    try {
+      //handle logout logic
+      const response = await axios.post(
+        `${url}/api/user/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setActivationToken(null);
+        redirectToLogin();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error: any) {
+      if (error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+    }
+  };
+
   return (
     <AppContext.Provider
-      value={{ url, activationToken, setActivationToken, redirectToLogin }}
+      value={{
+        url,
+        activationToken,
+        setActivationToken,
+        redirectToLogin,
+        handleLogout,
+      }}
     >
       {children}
     </AppContext.Provider>

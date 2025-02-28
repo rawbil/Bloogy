@@ -7,8 +7,11 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { useContextFunc } from "./context/AppContext";
 
 export default function Navbar() {
+  const { handleLogout } = useContextFunc();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [bar, setBar] = useState(false);
@@ -60,6 +63,8 @@ export default function Navbar() {
       link: "/politics",
     },
   ];
+
+  const token = Cookies.get("access_token");
 
   return (
     <nav
@@ -128,12 +133,19 @@ export default function Navbar() {
                   Contact Us
                 </Link>
               </li>
-              <button
-                onClick={() => router.push("/user/login")}
-                className="dark:bg-green hover:opacity-90 bg-crimson px-2 py-1 rounded duration-500 700:hidden "
-              >
-                Login
-              </button>
+              {}
+              {token ? (
+                <button className=" hover:opacity-90 bg-crimson px-2 py-1 rounded duration-500 700:hidden ">
+                  Logout
+                </button>
+              ) : (
+                <button
+                  onClick={() => router.push("/user/login")}
+                  className="dark:bg-green hover:opacity-90 bg-crimson px-2 py-1 rounded duration-500 700:hidden "
+                >
+                  Login
+                </button>
+              )}
             </ul>
           </OutsideClickHandler>
           <div className="flex gap-4 items-center">
@@ -167,12 +179,21 @@ export default function Navbar() {
               </span>
             )}
 
-            <button
-              onClick={() => router.push("/user/login")}
-              className="dark:bg-green hover:opacity-90 bg-crimson px-4 py-1 rounded duration-500 max-700:hidden"
-            >
-              Login
-            </button>
+            {token ? (
+              <button
+                className="hover:opacity-90 bg-crimson px-4 py-1 rounded duration-500 max-700:hidden"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push("/user/login")}
+                className="dark:bg-green hover:opacity-90 bg-crimson px-4 py-1 rounded duration-500 max-700:hidden"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </section>

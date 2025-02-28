@@ -1,3 +1,10 @@
+# Handling user session
+  -When user logs in, we set the user object to the state, and that will be used to identify if the user is logged in.
+  *
+  -When the user logs out, we clear the user state to null.
+  *
+  -If the cookie expires, we use axios interceptor to handle 401 error and clear the user state, meaning the user is logged out.  
+
 # Handling cookies
 
 - **Method 1**:
@@ -48,6 +55,9 @@ const fetchProtectedData = async () => {
       };
 
   ```
+
+  - **NOTE:** -Since we are using httpOnly in our cookie options, accessing the cookies in the frontend via javaScript js.cookie and document.cookie won't return the token.
+  - ** Using httpOnly is a secure way and should be encouraged, as it protects the site from corss-site scripting (XXS) attacks. If a malicious script were to run on your page, it wouldn't be able to access httpOnly cookies.
 
 ##
 
