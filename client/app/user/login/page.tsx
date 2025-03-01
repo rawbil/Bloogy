@@ -20,7 +20,7 @@ interface formData {
 }
 
 const Login = () => {
-  const { url } = useContextFunc();
+  const { url, setUser } = useContextFunc();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,8 @@ const Login = () => {
       }); //tells axios to include credentials(cookies, authorization headers,etc) in the request
       if (response.data.success) {
         toast.success(response.data.message);
+       // console.log(response.data.user);
+       setUser(response.data.user);
         const redirectUrl =
           new URLSearchParams(window.location.search).get("redirect") || "/";
         router.push(redirectUrl);

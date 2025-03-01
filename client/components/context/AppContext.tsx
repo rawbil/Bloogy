@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import {
@@ -11,6 +10,7 @@ import {
   useContext,
   useState,
 } from "react";
+import CheckAnauthorized from "../utils/CheckAnauthorized";
 
 interface IContext {
   url: string;
@@ -18,6 +18,8 @@ interface IContext {
   setActivationToken: Dispatch<SetStateAction<null>>;
   redirectToLogin: () => void;
   handleLogout: () => Promise<void>;
+  user: null,
+  setUser: Dispatch<SetStateAction<null>>
 }
 
 export const AppContext = createContext<IContext | undefined>(undefined);
@@ -28,7 +30,7 @@ export default function ProviderFunction({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  //const [accessToken, setAccessToken] = useState("");
+  const [user, setUser] = useState(null);
 
   const [activationToken, setActivationToken] = useState(null);
   const url = "http://localhost:8000";
@@ -53,9 +55,13 @@ export default function ProviderFunction({
       if (response.data.success) {
         toast.success(response.data.message);
         setActivationToken(null);
+        setUser(null);
         redirectToLogin();
       } else {
-        toast.error(response.data.message);
+        //call axios interceptor instead
+       /*  toast.error(response.data.message);
+        redirectToLogin();  */
+         CheckAnauthorized(); 
       }
     } catch (error: any) {
       if (error.response.data.message) {
@@ -74,6 +80,8 @@ export default function ProviderFunction({
         setActivationToken,
         redirectToLogin,
         handleLogout,
+        user,
+        setUser
       }}
     >
       {children}
