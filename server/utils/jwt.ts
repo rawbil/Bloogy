@@ -35,7 +35,9 @@ export const sendToken = async (user: IUser, res: Response) => {
   const refresh_token = user.signRefreshToken();
 
   //add user session to redis
-  await redis.set(user._id as string, JSON.stringify(user));
+//  await redis.setex(user._id as string, JSON.stringify(user));
+  //use setex to set expiration
+  await redis.setex(user._id as string, refreshTokenExpires * 60 * 60, JSON.stringify(user));
 
   res.cookie("access_token", access_token, accessTokenOptions);
   res.cookie("refresh_token", refresh_token, refreshTokenOptions);
